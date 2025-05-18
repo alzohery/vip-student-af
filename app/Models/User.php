@@ -6,18 +6,34 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Spatie\Permission\Traits\HasRoles;
+
+
 
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable;
-
+    use HasFactory, Notifiable, HasRoles;
     /**
      * The attributes that are mass assignable.
      *
      * @var list<string>
      */
-    protected $fillable = ['name', 'email', 'password', 'role_id'];
+    protected $fillable = [
+        'name',
+        'email',
+        'password',
+        'role_id',
+        'institute_id',
+        'profile_picture',
+        'birthdate',
+        'city_id',
+        'country',
+        'zip_code',
+        'phone',
+        'timezone',
+        'last_login_at',
+    ];
     
 
     /**
@@ -42,8 +58,18 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+    
+    public function setPasswordAttribute($value)
+    {
+        if ($value) {
+            $this->attributes['password'] = bcrypt($value);
+        }
+    }
+
     public function role()
     {
         return $this->belongsTo(Role::class);
     }
 }
+
+

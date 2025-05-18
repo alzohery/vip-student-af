@@ -1,10 +1,11 @@
 <?php
 namespace App\Models;
+
 use Illuminate\Database\Eloquent\Model;
 
-class RoleTranslation extends Model
+class PermissionTranslation extends Model
 {
     public $timestamps = false;
 
-    protected $fillable = ['locale', 'name'];
+    protected $fillable = ['locale', 'name', 'description'];
 }
