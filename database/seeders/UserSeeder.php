@@ -19,7 +19,7 @@ class UserSeeder extends Seeder
             return;
         }
 
-        User::create([
+        User::firstOrCreate([
             'name' => 'Admin User',
             'email' => 'admin@vipstudent.com',
             'password' => bcrypt('password'),

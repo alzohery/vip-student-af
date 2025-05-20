@@ -29,8 +29,8 @@ class RolePermissionSeeder extends Seeder
         // Create or update permission
         $permission = Permission::updateOrCreate(
             [
-                'guard_name' => 'web',
                 'id' => 3,
+                'guard_name' => 'web',
             ],
             [
                 'guard_name' => 'web',
@@ -49,6 +49,7 @@ class RolePermissionSeeder extends Seeder
             [
                 'name' => 'Admin User',
                 'password' => bcrypt('password'),
+                'role_id' => 1,
             ]
         );
 
