@@ -6,6 +6,11 @@
 *.md diff=markdown
 *.php diff=php
 
+* text=auto
+*.php text eol=lf
+*.txt text eol=lf
+*.sql text eol=lf
+
 /.github export-ignore
 CHANGELOG.md export-ignore
 .styleci.yml export-ignore

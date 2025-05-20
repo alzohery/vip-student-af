@@ -1,5 +1,6 @@
 <?php
-
+use Illuminate\Support\ServiceProvider;
+use Spatie\Permission\PermissionServiceProvider;
 return [
 
     /*
@@ -122,5 +123,16 @@ return [
         'driver' => env('APP_MAINTENANCE_DRIVER', 'file'),
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
+
+    'providers' => ServiceProvider::defaultProviders()->merge([
+        App\Providers\AppServiceProvider::class,
+        App\Providers\AuthServiceProvider::class,
+        App\Providers\EventServiceProvider::class,
+        App\Providers\RouteServiceProvider::class,
+        Spatie\Permission\PermissionServiceProvider::class,
+    ])->toArray(),
+    
+
+    
 
 ];

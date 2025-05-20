@@ -12,9 +12,10 @@ return [
     | as required, but they're a perfect start for most applications.
     |
     */
-
+    // 'guard' => 'web',
+    'guard' => env('AUTH_GUARD', 'web'),
     'defaults' => [
-        'guard' => env('AUTH_GUARD', 'web'),
+        'guard' => 'web',
         'passwords' => env('AUTH_PASSWORD_BROKER', 'users'),
     ],
 
@@ -59,10 +60,11 @@ return [
     |
     */
 
+    // 'model' => env('AUTH_MODEL', App\Models\User::class),
     'providers' => [
         'users' => [
             'driver' => 'eloquent',
-            'model' => env('AUTH_MODEL', App\Models\User::class),
+            'model' => App\Models\User::class,
         ],
 
         // 'users' => [
