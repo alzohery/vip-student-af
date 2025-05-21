@@ -44,15 +44,16 @@ class RolePermissionSeeder extends Seeder
         $role->permissions()->sync([3]);
 
         // Create or update user
-        $user = User::firstOrCreate(
-            ['email' => 'admin@vipstudent.com'],
-            [
-                'name' => 'Admin User',
-                'password' => bcrypt('password'),
-                'role_id' => 1,
-            ]
-        );
-
+        if (!User::where('email', 'admin@vipstudent.com')->exists()) {
+            $user = User::firstOrCreate(
+                ['email' => 'admin@vipstudent.com'],
+                [
+                    'name' => 'Admin User',
+                    'password' => bcrypt('password'),
+                    'role_id' => 1,
+                ]
+            );
+        }
         // Assign role to user
         $user->assignRole($role);
     }

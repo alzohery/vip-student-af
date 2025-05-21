@@ -7,12 +7,13 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Support\Facades\Hash;
+use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable, HasRoles;
+    use HasFactory, Notifiable, HasRoles, HasApiTokens;
 
-    protected $guard_name = 'web';
+    // protected $guard_name = 'web';
 
     protected $fillable = [
         'name',
@@ -38,6 +39,7 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
         'birthdate' => 'date',
+        // 'password' => 'hashed',
     ];
 
     public function guardName(): string
@@ -45,9 +47,18 @@ class User extends Authenticatable
         return 'web';
     }
 
+    // public function setPasswordAttribute($value)
+    // {
+    //     $this->attributes['password'] = Hash::make($value);
+    // }
+
     public function setPasswordAttribute($value)
     {
-        $this->attributes['password'] = Hash::make($value);
+        if (\Illuminate\Support\Facades\Hash::needsRehash($value)) {
+            $this->attributes['password'] = \Illuminate\Support\Facades\Hash::make($value);
+        } else {
+            $this->attributes['password'] = $value;
+        }
     }
 
     public function role()
