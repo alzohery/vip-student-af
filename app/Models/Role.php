@@ -15,7 +15,7 @@ class Role extends Model implements TranslatableContract, RoleContract
 
     public $translatedAttributes = ['name'];
 
-    protected $fillable = ['level'];
+    protected $fillable = ['level', 'guard_name', 'slug'];
 
     public function permissions(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
@@ -67,6 +67,17 @@ class Role extends Model implements TranslatableContract, RoleContract
         return $role;
     }
 
+    public static function findBySlug(string $slug, ?string $guardName = null): RoleContract
+    {
+        $role = static::where('slug', $slug)->first();
+
+        if (!$role) {
+            throw new \Spatie\Permission\Exceptions\RoleDoesNotExist();
+        }
+
+        return $role;
+    }
+
     public static function findOrCreate(string $name, ?string $guardName = null): RoleContract
     {
         $locale = app()->getLocale();
@@ -75,7 +86,11 @@ class Role extends Model implements TranslatableContract, RoleContract
         })->first();
 
         if (!$role) {
-            $role = static::create(['level' => 1]);
+            $role = static::create([
+                'level' => 1,
+                'guard_name' => $guardName ?? 'web',
+                'slug' => \Illuminate\Support\Str::slug($name),
+            ]);
             $role->translateOrNew($locale)->name = $name;
             $role->save();
         }
@@ -83,4 +98,3 @@ class Role extends Model implements TranslatableContract, RoleContract
         return $role;
     }
 }
-

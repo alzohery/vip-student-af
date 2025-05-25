@@ -5,6 +5,7 @@ use Tests\TestCase;
 class DatabaseSchemaTest extends TestCase
 {
     use RefreshDatabase;
+
     public function test_languages_table_exists()
     {
         $this->assertTrue(\Schema::hasTable('languages'));
@@ -37,9 +38,19 @@ class DatabaseSchemaTest extends TestCase
         $this->seed(\Database\Seeders\CitySeeder::class);
         $this->assertDatabaseHas('city_translations', ['locale' => 'ar', 'name' => 'القاهرة']);
     }
+    // public function test_role_seeder_works()
+    // {
+    //     $this->seed(\Database\Seeders\RoleSeeder::class);
+    //     $this->assertDatabaseHas('role_translations', ['locale' => 'en', 'name' => 'Admin']);
+    // }
+
     public function test_role_seeder_works()
     {
-        $this->seed(\Database\Seeders\RoleSeeder::class);
+        // شغّل LanguageSeeder الأول
+        $this->artisan('db:seed', ['--class' => 'LanguageSeeder']);
+        // شغّل RoleSeeder بعديه
+        $this->artisan('db:seed', ['--class' => 'RoleSeeder']);
+        $this->assertDatabaseHas('roles', ['slug' => 'admin']);
         $this->assertDatabaseHas('role_translations', ['locale' => 'en', 'name' => 'Admin']);
     }
     public function test_user_seeder_works()

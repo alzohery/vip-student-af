@@ -31,10 +31,11 @@ class AuthTest extends TestCase
             'email' => 'newuser@vipstudent.com',
             'password' => 'password123',
             'password_confirmation' => 'password123',
-            'role_id' => 1,
+            'role_slug' => 'admin',
             'birthdate' => '1995-05-15',
             'phone' => '+201234567890',
             'country' => 'Egypt',
+            'zip_code' => '12345',
             'timezone' => 'Africa/Cairo',
         ], ['Accept-Language' => 'ar']);
 
@@ -51,32 +52,39 @@ class AuthTest extends TestCase
         $this->assertDatabaseHas('users', [
             'email' => 'newuser@vipstudent.com',
             'name' => 'New User',
+            'role_id' => Role::where('slug', 'admin')->first()->id,
         ]);
     }
 
     public function test_it_fails_to_register_with_duplicate_email()
-{
-    User::factory()->create([
-        'email' => 'existing@vipstudent.com',
-        'password' => Hash::make('password123'),
-        'role_id' => 1,
-    ]);
+    {
+        User::create([
+            'name' => 'Test User',
+            'email' => 'existing@vipstudent.com',
+            'password' => Hash::make('password123'),
+            'role_id' => Role::where('slug', 'admin')->first()->id,
+            'birthdate' => '1995-05-15',
+            'phone' => '+201234567890',
+            'country' => 'Egypt',
+            'zip_code' => '12345',
+            'timezone' => 'Africa/Cairo',
+        ]);
 
-    $response = $this->postJson('/api/auth/register', [
-        'name' => 'Test User',
-        'email' => 'existing@vipstudent.com',
-        'password' => 'password123',
-        'password_confirmation' => 'password123',
-        'role_id' => 1,
-    ], ['Accept-Language' => 'ar']);
+        $response = $this->postJson('/api/auth/register', [
+            'name' => 'Test User',
+            'email' => 'existing@vipstudent.com',
+            'password' => 'password123',
+            'password_confirmation' => 'password123',
+            'role_slug' => 'admin',
+        ], ['Accept-Language' => 'ar']);
 
-    $response->assertStatus(422)
-             ->assertJson([
-                 'error' => [
-                     'email' => ['البريد الإلكتروني مستخدم بالفعل.'],
-                 ],
-             ]);
-}
+        $response->assertStatus(422)
+                 ->assertJson([
+                     'error' => [
+                         'email' => ['البريد الإلكتروني مستخدم بالفعل.'],
+                     ],
+                 ]);
+    }
 
     public function test_it_can_login_with_valid_credentials()
     {
@@ -115,7 +123,7 @@ class AuthTest extends TestCase
             'email' => 'admin@vipstudent.com',
             'password' => 'password123',
             'password_confirmation' => 'password123',
-            'role_id' => 1,
+            'role_slug' => 'admin',
         ], ['Accept-Language' => 'en']);
 
         $response->assertStatus(422)
@@ -126,20 +134,20 @@ class AuthTest extends TestCase
                  ]);
     }
 
-    public function test_it_fails_to_register_with_invalid_role_id()
+    public function test_it_fails_to_register_with_invalid_role_slug()
     {
         $response = $this->postJson('/api/auth/register', [
             'name' => 'New User',
             'email' => 'newuser@vipstudent.com',
             'password' => 'password123',
             'password_confirmation' => 'password123',
-            'role_id' => 999, // Non-existent role_id
+            'role_slug' => 'invalid_role',
         ], ['Accept-Language' => 'ar']);
 
         $response->assertStatus(422)
                  ->assertJson([
                      'error' => [
-                         'role_id' => ['الحقل الدور المختار غير صالح.'],
+                         'role_slug' => ['الحقل الدور المختار غير صالح.'],
                      ],
                  ]);
     }

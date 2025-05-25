@@ -1,78 +1,53 @@
 <?php
+
 namespace Database\Seeders;
-use Illuminate\Database\Seeder;
+
 use App\Models\Role;
-use App\Models\RoleTranslation;
-use App\Models\Language;
-use Carbon\Carbon;
+use Illuminate\Database\Seeder;
 
 class RoleSeeder extends Seeder
 {
-    public function run(): void
+    public function run()
     {
-        // التأكد من وجود اللغات
-        $languages = Language::pluck('code')->toArray();
-        if (empty($languages)) {
-            // تشغيل LanguageSeeder إذا لم تكن اللغات موجودة
-            $this->call(LanguageSeeder::class);
-            $languages = Language::pluck('code')->toArray();
-        }
 
-        // إنشاء دور 1
-        $role = Role::create([
-            'level' => 1,
-            'created_at' => Carbon::now(),
-            'updated_at' => Carbon::now(),
-        ]);
+        // Create or update Admin role
+        $adminRole = Role::updateOrCreate(
+            ['id' => 1, 'guard_name' => 'web'],
+            ['level' => 1, 'guard_name' => 'web', 'slug' => 'admin']
+        );
+        $adminRole->translations()->firstOrCreate(['locale' => 'en', 'name' => 'Admin']);
+        $adminRole->translations()->firstOrCreate(['locale' => 'ar', 'name' => 'مدير']);
 
-        foreach (['ar' => 'مدير', 'en' => 'Admin'] as $locale => $name) {
-            if (in_array($locale, $languages)) {
-                RoleTranslation::create([
-                    'role_id' => $role->id,
-                    'locale' => $locale,
-                    'name' => $name,
-                    'created_at' => Carbon::now(),
-                    'updated_at' => Carbon::now(),
-                ]);
-            }
-        }
+        // Create or update Guardian role
+        $guardianRole = Role::updateOrCreate(
+            ['id' => 2, 'guard_name' => 'web'],
+            ['level' => 2, 'guard_name' => 'web', 'slug' => 'guardian']
+        );
+        $guardianRole->translations()->firstOrCreate(['locale' => 'en', 'name' => 'Guardian']);
+        $guardianRole->translations()->firstOrCreate(['locale' => 'ar', 'name' => 'ولي الأمر']);
 
-        // إنشاء دور 2
-        $role2 = Role::create([
-            'level' => 2,
-            'created_at' => Carbon::now(),
-            'updated_at' => Carbon::now(),
-        ]);
+        // Create or update Student role
+        $studentRole = Role::updateOrCreate(
+            ['id' => 3, 'guard_name' => 'web'],
+            ['level' => 3, 'guard_name' => 'web', 'slug' => 'student']
+        );
+        $studentRole->translations()->firstOrCreate(['locale' => 'en', 'name' => 'Student']);
+        $studentRole->translations()->firstOrCreate(['locale' => 'ar', 'name' => 'طالب']);
 
-        foreach (['ar' => 'مدرب', 'en' => 'Instructor'] as $locale => $name) {
-            if (in_array($locale, $languages)) {
-                RoleTranslation::create([
-                    'role_id' => $role2->id,
-                    'locale' => $locale,
-                    'name' => $name,
-                    'created_at' => Carbon::now(),
-                    'updated_at' => Carbon::now(),
-                ]);
-            }
-        }
+        // Create or update Teacher role
+        $teacherRole = Role::updateOrCreate(
+            ['id' => 4, 'guard_name' => 'web'],
+            ['level' => 4, 'guard_name' => 'web', 'slug' => 'teacher']
+        );
+        $teacherRole->translations()->firstOrCreate(['locale' => 'en', 'name' => 'Teacher']);
+        $teacherRole->translations()->firstOrCreate(['locale' => 'ar', 'name' => 'معلم']);
 
-        // إنشاء دور 3
-        $role3 = Role::create([
-            'level' => 3,
-            'created_at' => Carbon::now(),
-            'updated_at' => Carbon::now(),
-        ]);
-
-        foreach (['ar' => 'طالب', 'en' => 'Student'] as $locale => $name) {
-            if (in_array($locale, $languages)) {
-                RoleTranslation::create([
-                    'role_id' => $role3->id,
-                    'locale' => $locale,
-                    'name' => $name,
-                    'created_at' => Carbon::now(),
-                    'updated_at' => Carbon::now(),
-                ]);
-            }
-        }
+        // Create or update Institute role
+        $instituteRole = Role::updateOrCreate(
+            ['id' => 5, 'guard_name' => 'web'],
+            ['level' => 5, 'guard_name' => 'web', 'slug' => 'institute']
+        );
+        $instituteRole->translations()->firstOrCreate(['locale' => 'en', 'name' => 'Institute']);
+        $instituteRole->translations()->firstOrCreate(['locale' => 'ar', 'name' => 'معهد']);
     }
 }

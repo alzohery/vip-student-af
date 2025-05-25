@@ -2,6 +2,7 @@
 
 return [
     
+    
 
     'accepted' => 'يجب قبول الحقل :attribute.',
     'active_url' => 'الحقل :attribute ليس عنوان URL صالحًا.',
@@ -20,7 +21,7 @@ return [
         'array' => 'يجب أن يحتوي الحقل :attribute على :min إلى :max عنصرًا.',
     ],
     'boolean' => 'يجب أن يكون الحقل :attribute صحيحًا أو خاطئًا.',
-    'confirmed' => 'تأكيد الحقل :attribute غير متطابق.',
+    
     'date' => 'الحقل :attribute ليس تاريخًا صالحًا.',
     'date_equals' => 'يجب أن يكون الحقل :attribute تاريخًا يساوي :date.',
     'date_format' => 'الحقل :attribute لا يتطابق مع التنسيق :format.',
@@ -29,7 +30,7 @@ return [
     'digits_between' => 'يجب أن يكون الحقل :attribute بين :min و :max أرقام.',
     'dimensions' => 'الحقل :attribute يحتوي على أبعاد صورة غير صالحة.',
     'distinct' => 'الحقل :attribute يحتوي على قيمة مكررة.',
-    'email' => 'يجب أن يكون الحقل :attribute بريدًا إلكترونيًا صالحًا.',
+    
     'ends_with' => 'يجب أن ينتهي الحقل :attribute بأحد القيم التالية: :values.',
     'exists' => 'الحقل :attribute المختار غير صالح.',
     'file' => 'يجب أن يكون الحقل :attribute ملفًا.',
@@ -47,7 +48,7 @@ return [
         'array' => 'يجب أن يحتوي الحقل :attribute على :value عنصرًا أو أكثر.',
     ],
     'image' => 'يجب أن يكون الحقل :attribute صورة.',
-    'in' => 'الحقل :attribute المختار غير صالح.',
+    
     'in_array' => 'الحقل :attribute غير موجود في :other.',
     'integer' => 'يجب أن يكون الحقل :attribute عددًا صحيحًا.',
     'ip' => 'يجب أن يكون الحقل :attribute عنوان IP صالحًا.',
@@ -85,7 +86,7 @@ return [
     'numeric' => 'يجب أن يكون الحقل :attribute رقمًا.',
     'present' => 'يجب أن يكون الحقل :attribute موجودًا.',
     'regex' => 'تنسيق الحقل :attribute غير صالح.',
-    'required' => 'الحقل :attribute مطلوب.',
+    
     'required_if' => 'الحقل :attribute مطلوب عندما يكون :other هو :value.',
     'required_unless' => 'الحقل :attribute مطلوب ما لم يكن :other في :values.',
     'required_with' => 'الحقل :attribute مطلوب عندما يكون :values موجودًا.',
@@ -102,7 +103,7 @@ return [
     'starts_with' => 'يجب أن يبدأ الحقل :attribute بأحد القيم التالية: :values.',
     'string' => 'يجب أن يكون الحقل :attribute نصًا.',
     'timezone' => 'يجب أن يكون الحقل :attribute منطقة زمنية صالحة.',
-    'unique' => 'القيمة :attribute مستخدمة بالفعل.',
+    
     'uploaded' => 'فشل رفع الحقل :attribute.',
     'url' => 'يجب أن يكون الحقل :attribute عنوان URL صالحًا.',
     'uuid' => 'يجب أن يكون الحقل :attribute UUID صالحًا.',
@@ -121,11 +122,26 @@ return [
         'name' => 'الاسم',
         'email' => 'البريد الإلكتروني',
         'password' => 'كلمة المرور',
-        'role_id' => 'الدور',
+        'role' => 'الدور',
+        'role_slug' => 'الدور',
         'birthdate' => 'تاريخ الميلاد',
         'city_id' => 'المدينة',
-        'phone' => 'رقم الهاتف',
+        'phone' => 'الهاتف',
         'country' => 'الدولة',
         'timezone' => 'المنطقة الزمنية',
+        'zip_code' => 'الرمز البريدي',
     ],
+
+    'in' => 'الحقل :attribute المختار غير صالح.',
+    'required' => 'حقل :attribute مطلوب.',
+    'email' => 'يجب أن يكون :attribute بريدًا إلكترونيًا صالحًا.',
+    'unique' => ':attribute مستخدم بالفعل.',
+    'confirmed' => 'تأكيد :attribute غير متطابق.',
+    
+    'invalid_country' => 'الدولة غير صالحة.',
+    'invalid_city' => 'المدينة غير صالحة.',
+    'invalid_timezone_for_country' => 'المنطقة الزمنية غير متوافقة مع الدولة المحددة.',
+    'invalid_zip_code' => 'الرمز البريدي غير صالح لـ :country.',
+    'invalid_zip_code_generic' => 'الرمز البريدي يجب أن يكون بين 3 و20 حرفًا أو رقمًا.',
+    
 ];

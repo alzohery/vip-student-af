@@ -26,7 +26,9 @@ return Application::configure(basePath: dirname(__DIR__))
 
         $middleware->alias([
             'set-locale' => SetLocale::class,
+            'auth:sanctum' => \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
         ]);
+        
     })
 
 

@@ -11,50 +11,68 @@ class RolePermissionSeeder extends Seeder
 {
     public function run()
     {
-        // Create or update role
-        $role = Role::updateOrCreate(
-            [
-                'id' => 1,
-                'guard_name' => 'web',
-            ],
-            [
-                'level' => 1,
-                'guard_name' => 'web',
-            ]
+        // Create or update Admin role
+        $adminRole = Role::updateOrCreate(
+            ['id' => 1, 'guard_name' => 'web'],
+            ['level' => 1, 'guard_name' => 'web', 'slug' => 'admin']
         );
-        $role->translateOrNew('en')->name = 'Admin';
-        $role->translateOrNew('ar')->name = 'مدير';
-        $role->save();
+        $adminRole->translations()->firstOrCreate(['locale' => 'en', 'name' => 'Admin']);
+        $adminRole->translations()->firstOrCreate(['locale' => 'ar', 'name' => 'مدير']);
+
+        // Create or update Guardian role
+        $guardianRole = Role::updateOrCreate(
+            ['id' => 2, 'guard_name' => 'web'],
+            ['level' => 2, 'guard_name' => 'web', 'slug' => 'guardian']
+        );
+        $guardianRole->translations()->firstOrCreate(['locale' => 'en', 'name' => 'Guardian']);
+        $guardianRole->translations()->firstOrCreate(['locale' => 'ar', 'name' => 'ولي الأمر']);
+
+        // Create or update Student role
+        $studentRole = Role::updateOrCreate(
+            ['id' => 3, 'guard_name' => 'web'],
+            ['level' => 3, 'guard_name' => 'web', 'slug' => 'student']
+        );
+        $studentRole->translations()->firstOrCreate(['locale' => 'en', 'name' => 'Student']);
+        $studentRole->translations()->firstOrCreate(['locale' => 'ar', 'name' => 'طالب']);
+
+        // Create or update Teacher role
+        $teacherRole = Role::updateOrCreate(
+            ['id' => 4, 'guard_name' => 'web'],
+            ['level' => 4, 'guard_name' => 'web', 'slug' => 'teacher']
+        );
+        $teacherRole->translations()->firstOrCreate(['locale' => 'en', 'name' => 'Teacher']);
+        $teacherRole->translations()->firstOrCreate(['locale' => 'ar', 'name' => 'معلم']);
+
+        // Create or update Institute role
+        $instituteRole = Role::updateOrCreate(
+            ['id' => 5, 'guard_name' => 'web'],
+            ['level' => 5, 'guard_name' => 'web', 'slug' => 'institute']
+        );
+        $instituteRole->translations()->firstOrCreate(['locale' => 'en', 'name' => 'Institute']);
+        $instituteRole->translations()->firstOrCreate(['locale' => 'ar', 'name' => 'معهد']);
 
         // Create or update permission
         $permission = Permission::updateOrCreate(
-            [
-                'id' => 3,
-                'guard_name' => 'web',
-            ],
-            [
-                'guard_name' => 'web',
-            ]
+            ['id' => 3, 'guard_name' => 'web'],
+            ['guard_name' => 'web']
         );
-        $permission->translateOrNew('en')->name = 'Edit Users';
-        $permission->translateOrNew('ar')->name = 'تعديل المستخدمين';
-        $permission->save();
+        $permission->translations()->firstOrCreate(['locale' => 'en', 'name' => 'Edit Users']);
+        $permission->translations()->firstOrCreate(['locale' => 'ar', 'name' => 'تعديل المستخدمين']);
 
-        // Attach permission to role
-        $role->permissions()->sync([3]);
+        // Attach permission to Admin role
+        $adminRole->permissions()->sync([3]);
 
-        // Create or update user
+        // Create or update admin user
         if (!User::where('email', 'admin@vipstudent.com')->exists()) {
             $user = User::firstOrCreate(
                 ['email' => 'admin@vipstudent.com'],
                 [
                     'name' => 'Admin User',
                     'password' => bcrypt('password'),
-                    'role_id' => 1,
+                    'role_id' => $adminRole->id,
                 ]
             );
+            $user->assignRole($adminRole);
         }
-        // Assign role to user
-        $user->assignRole($role);
     }
 }
