@@ -14,7 +14,7 @@ class User extends Authenticatable
 {
     use HasFactory, Notifiable, HasRoles, HasApiTokens;
 
-    protected $guard_name = 'web';
+    protected $guard_name = 'api';
 
     protected $fillable = [
         'name',
@@ -45,7 +45,7 @@ class User extends Authenticatable
 
     public function guardName(): string
     {
-        return 'web';
+        return 'api';
     }
 
     // public function setPasswordAttribute($value)
@@ -68,7 +68,7 @@ class User extends Authenticatable
     }
     public function getGuardNameAttribute(): string
     {
-        return 'web';
+        return 'api';
     }
 
     /**

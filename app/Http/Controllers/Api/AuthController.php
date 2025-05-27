@@ -285,7 +285,7 @@ class AuthController extends Controller
 
         
         $user = User::where('email', $request->email)->first();
-        $user->update(['last_login_at' => now()]);
+        
 
         if (!$user || !Hash::check($request->password, $user->password)) {
             return response()->json(['error' => __('auth.failed')], 401);
@@ -302,7 +302,7 @@ class AuthController extends Controller
         // لو كان الـ userData يحتوي على مفتاح role، نحذفه حتى لا تظهر التفاصيل الكاملة
         unset($userData['role']);
 
-        
+        $user->update(['last_login_at' => now()]);
 
         return response()->json([
             'message' => __('auth.login_success'),

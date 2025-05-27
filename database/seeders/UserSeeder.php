@@ -18,13 +18,15 @@ class UserSeeder extends Seeder
             $this->command->warn('Admin role not found. Skipping user creation.');
             return;
         }
+
         if (!User::where('email', 'admin@vipstudent.com')->exists()) {
-            User::firstOrCreate([
+            $user = User::firstOrCreate([
                 'name' => 'Admin User',
                 'email' => 'admin@vipstudent.com',
                 'password' => bcrypt('password'),
                 'role_id' => $adminRole->id,
             ]);
+            $user->assignRole($adminRole);
         }
     }
 }

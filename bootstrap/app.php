@@ -4,7 +4,11 @@ use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 
+use Spatie\Permission\Middleware\RoleMiddleware;
+use Spatie\Permission\Middleware\PermissionMiddleware;
+
 use App\Http\Middleware\SetLocale;
+use App\Http\Middleware\TranslatablePermissionMiddleware;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -27,6 +31,10 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'set-locale' => SetLocale::class,
             'auth:sanctum' => \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
+            'role' => RoleMiddleware::class,
+            'permission' => PermissionMiddleware::class,
+            'permission.translatable' => TranslatablePermissionMiddleware::class,
+            
         ]);
         
     })
