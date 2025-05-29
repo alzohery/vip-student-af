@@ -18,6 +18,7 @@ use Illuminate\Auth\Events\PasswordReset;
 
 use App\Models\AuditLog;
 use App\Models\AuditLogTranslation;
+use App\Services\SmsService;
 
 class AuthController extends Controller
 {
@@ -428,6 +429,22 @@ class AuthController extends Controller
         return $status === Password::PASSWORD_RESET
             ? response()->json(['message' => __($status)], 200)
             : response()->json(['message' => __($status)], 400);
+    }
+
+    public function sendVerificationCode(Request $request)
+    {
+        $request->validate(['phone_number' => 'required']);
+        $code = rand(100000, 999999);
+        app(SmsService::class)->sendVerificationCode($request->phone_number, $code);
+        // احفظ الكود في Redis أو DB
+        return response()->json(['message' => 'Code sent']);
+    }
+
+    public function verifyCode(Request $request)
+    {
+        $request->validate(['phone_number' => 'required', 'code' => 'required']);
+        $verified = app(SmsService::class)->verifyCode($request->phone_number, $request->code);
+        return response()->json(['verified' => $verified]);
     }
 
 }

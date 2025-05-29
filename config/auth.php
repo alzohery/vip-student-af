@@ -13,9 +13,10 @@ return [
     |
     */
     // 'guard' => 'web',
-    'guard' => env('AUTH_GUARD', 'web'),
+    // 'guard' => env('AUTH_GUARD', 'web'),
     'defaults' => [
-        'guard' => 'web',
+        // 'guard' => 'web',
+        'guard' => 'sanctum',
         'passwords' => env('AUTH_PASSWORD_BROKER', 'users'),
     ],
 
@@ -44,6 +45,13 @@ return [
     ],
 
     'api' => [
+        // 'driver' => 'sanctum',
+        // 'provider' => 'users',
+        'driver' => 'token',
+        'provider' => 'users',
+        'hash' => false,
+    ],
+    'sanctum' => [
         'driver' => 'sanctum',
         'provider' => 'users',
     ],

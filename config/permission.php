@@ -73,7 +73,8 @@ return [
         'role_has_permissions' => 'role_permissions',
     ],
 
-    'default_guard' => 'web',
+    // 'default_guard' => 'web',
+    'default_guard' => 'sanctum',
     
     'column_names' => [
         'guard_name' => 'guard_name',
@@ -207,6 +208,7 @@ return [
 
         'store' => 'default',
     ],
+    
 
     // 'default_guard' => 'web', // خلّيه web عشان يتطابق مع التطبيق
     'teams' => false,

@@ -27,14 +27,21 @@ class Role extends Model implements TranslatableContract, RoleContract
         );
     }
 
+    // عدّل getNameAttribute عشان يرجّع الـ slug بدل الاسم المترجم
     public function getNameAttribute()
+    {
+        return $this->attributes['slug'];
+    }
+
+    // دالة جديدة للاسم المترجم
+    public function getTranslatedNameAttribute()
     {
         return $this->translate(app()->getLocale())->name;
     }
 
     public function getGuardNameAttribute()
     {
-        return $this->attributes['guard_name'] ?? 'web';
+        return $this->attributes['guard_name'] ?? 'sanctum'; // غيّر إلى sanctum
     }
 
     public function getKeyName()
@@ -45,9 +52,10 @@ class Role extends Model implements TranslatableContract, RoleContract
     public static function findByName(string $name, ?string $guardName = null): RoleContract
     {
         $locale = app()->getLocale();
-        $role = static::whereHas('translations', function ($query) use ($name, $locale) {
-            $query->where('name', $name)->where('locale', $locale);
-        })->first();
+        $role = static::where('slug', $name)
+            ->orWhereHas('translations', function ($query) use ($name, $locale) {
+                $query->where('name', $name)->where('locale', $locale);
+            })->first();
 
         if (!$role) {
             throw new \Spatie\Permission\Exceptions\RoleDoesNotExist();
@@ -81,14 +89,15 @@ class Role extends Model implements TranslatableContract, RoleContract
     public static function findOrCreate(string $name, ?string $guardName = null): RoleContract
     {
         $locale = app()->getLocale();
-        $role = static::whereHas('translations', function ($query) use ($name, $locale) {
-            $query->where('name', $name)->where('locale', $locale);
-        })->first();
+        $role = static::where('slug', $name)
+            ->orWhereHas('translations', function ($query) use ($name, $locale) {
+                $query->where('name', $name)->where('locale', $locale);
+            })->first();
 
         if (!$role) {
             $role = static::create([
                 'level' => 1,
-                'guard_name' => $guardName ?? 'web',
+                'guard_name' => $guardName ?? 'sanctum',
                 'slug' => \Illuminate\Support\Str::slug($name),
             ]);
             $role->translateOrNew($locale)->name = $name;

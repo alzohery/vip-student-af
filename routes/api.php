@@ -46,3 +46,6 @@ Route::middleware('auth:sanctum')->get('/user', function () {
 Route::middleware(['auth:sanctum', 'permission.translatable:View Courses'])->group(function () {
     Route::get('courses', [CourseController::class, 'index']);
 });
+
+Route::post('/send-sms', [AuthController::class, 'sendVerificationCode']);
+Route::post('/verify-sms', [AuthController::class, 'verifyCode']);

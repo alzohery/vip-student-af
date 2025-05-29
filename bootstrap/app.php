@@ -21,29 +21,50 @@ return Application::configure(basePath: dirname(__DIR__))
     //     //
     // })
 
-    ->withMiddleware(function (Middleware $middleware) {
-        $middleware->api(prepend: [
-            SetLocale::class,
-            \Illuminate\Routing\Middleware\ThrottleRequests::class.':api',
-            \Illuminate\Routing\Middleware\SubstituteBindings::class,
-        ]);
+    // ->withMiddleware(function (Middleware $middleware) {
+    //     $middleware->api(prepend: [
+    //         SetLocale::class,
+    //         \Illuminate\Routing\Middleware\ThrottleRequests::class.':api',
+    //         \Illuminate\Routing\Middleware\SubstituteBindings::class,
+    //     ]);
 
-        $middleware->alias([
-            'set-locale' => SetLocale::class,
-            'auth:sanctum' => \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
-            'role' => RoleMiddleware::class,
-            'permission' => PermissionMiddleware::class,
-            'permission.translatable' => TranslatablePermissionMiddleware::class,
+    //     $middleware->alias([
+    //         'auth' => \App\Http\Middleware\Authenticate::class,
+    //         'sanctum' => \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
+
+    //         'set-locale' => SetLocale::class,
+    //         'auth:sanctum' => \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
+    //         'role' => RoleMiddleware::class,
+    //         'permission' => PermissionMiddleware::class,
+    //         'permission-translatable' => TranslatablePermissionMiddleware::class,
             
-        ]);
+    //     ]);
         
-    })
+    // })
+    
+    ->withMiddleware(function (Middleware $middleware) {
+    $middleware->api(prepend: [
+        \App\Http\Middleware\SetLocale::class,
+        \Illuminate\Routing\Middleware\ThrottleRequests::class.':api',
+        \Illuminate\Routing\Middleware\SubstituteBindings::class, // إصلاح الـ namespace
+    ]);
+
+    $middleware->alias([
+        'auth' => \Illuminate\Auth\Middleware\Authenticate::class,
+        'sanctum' => \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
+        'set-locale' => \App\Http\Middleware\SetLocale::class,
+        'role' => \Spatie\Permission\Middleware\RoleMiddleware::class,
+        'permission' => \Spatie\Permission\Middleware\PermissionMiddleware::class,
+        'permission-translatable' => \App\Http\Middleware\TranslatablePermissionMiddleware::class,
+    ]);
+})
+
+
 
 
     ->withExceptions(function (Exceptions $exceptions) {
         //
     })->create();
-
     
 
     

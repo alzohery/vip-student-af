@@ -13,8 +13,8 @@ class Permission extends Model implements TranslatableContract, PermissionContra
     use HasFactory, Translatable;
 
     public $translatedAttributes = ['name', 'description'];
-
-    protected $fillable = [];
+    
+    protected $fillable = ['guard_name'];
 
     public function roles(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
@@ -26,14 +26,19 @@ class Permission extends Model implements TranslatableContract, PermissionContra
         );
     }
 
+    // public function getNameAttribute()
+    // {
+    //     return $this->translate(app()->getLocale())->name;
+    // }
+
     public function getNameAttribute()
-{
-    return $this->translate(app()->getLocale())->name;
-}
+    {
+        return $this->translate(app()->getLocale())?->name ?? $this->attributes['name'] ?? '';
+    }
 
     public function getGuardNameAttribute()
     {
-        return $this->attributes['guard_name'] ?? 'web';
+        return $this->attributes['guard_name'] ?? 'api';
     }
 
     public function getKeyName()
@@ -74,9 +79,17 @@ class Permission extends Model implements TranslatableContract, PermissionContra
         })->first();
 
         if (!$permission) {
-            $permission = static::create([]);
+            // $permission = static::create([]);
+            // $permission->translateOrNew($locale)->name = $name;
+            // $permission->save();
+            
+            $permission = static::create([
+                'guard_name' => $guardName ?? config('auth.defaults.guard'), // أو 'api'
+            ]);
             $permission->translateOrNew($locale)->name = $name;
             $permission->save();
+
+
         }
 
         return $permission;
